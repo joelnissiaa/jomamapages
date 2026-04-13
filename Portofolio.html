@@ -1,0 +1,1424 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Joel Nissi — Freelance Photographer & Videographer</title>
+
+    <!-- ============================================================
+       GOOGLE FONTS
+       Cormorant Garamond = judul elegan & sinematik
+       Jost = body teks modern & bersih
+       Ganti font di sini jika ingin tampilan berbeda
+       ============================================================ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+
+    <!-- ============================================================
+       SEMUA STYLING ADA DI DALAM TAG <style> INI
+       Setiap bagian diberi komentar agar mudah ditemukan
+       ============================================================ -->
+    <style>
+      /* ============================================================
+       1. CSS VARIABLES (PALET WARNA & FONT)
+       Ubah nilai di sini untuk mengganti tema seluruh website
+       ============================================================ */
+      :root {
+        /* Warna Utama */
+        --bg-dark: #0d0c0b; /* Latar belakang gelap, hampir hitam hangat */
+        --bg-section: #121110; /* Latar bagian alternatif */
+        --surface: #1c1a18; /* Kartu / elemen permukaan */
+        --border: #2e2a26; /* Warna garis tepi */
+
+        /* Aksen Warna — ganti ini untuk nuansa berbeda */
+        --accent: #c8a96e; /* Emas sinematik (hangat) */
+        --accent-muted: #9e7f4a; /* Versi lebih redup dari aksen */
+        --accent-glow: rgba(200, 169, 110, 0.12);
+
+        /* Teks */
+        --text-primary: #f0ebe3; /* Putih gading hangat */
+        --text-secondary: #9b9188; /* Abu-abu hangat */
+        --text-muted: #5e574f; /* Teks sangat redup */
+
+        /* Font */
+        --font-display: "Cormorant Garamond", serif; /* Judul */
+        --font-body: "Jost", sans-serif; /* Teks biasa */
+
+        /* Spasi & Layout */
+        --nav-h: 70px;
+        --section-pad: 100px;
+        --radius: 4px;
+        --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      /* ============================================================
+       2. RESET & BASE STYLES
+       ============================================================ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-size: 16px;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        font-weight: 300;
+        line-height: 1.7;
+        overflow-x: hidden;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      /* ============================================================
+       3. TYPOGRAPHY HELPERS
+       ============================================================ */
+      .section-label {
+        font-family: var(--font-body);
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 1.2rem;
+      }
+
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 300;
+        line-height: 1.15;
+        color: var(--text-primary);
+      }
+
+      .section-title em {
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      /* ============================================================
+       4. NAVBAR
+       Sticky navbar yang transparan, berubah solid saat scroll
+       Efek scroll menggunakan CSS :has() dan checkbox trick
+       (murni CSS, tanpa JavaScript)
+       ============================================================ */
+
+      /* Trik CSS-only sticky nav: gunakan scroll-driven @keyframes
+       untuk menambah class shadow saat scroll */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        padding: 0 5%;
+        justify-content: space-between;
+
+        /* Awalnya transparan */
+        background: transparent;
+        border-bottom: 1px solid transparent;
+
+        /* Transisi halus */
+        transition:
+          background var(--transition),
+          border-color var(--transition),
+          backdrop-filter var(--transition);
+
+        /* Animasi background berdasarkan scroll — CSS scroll-driven */
+        animation: nav-scroll linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 80px;
+      }
+
+      /* Saat pengguna scroll, navbar menjadi solid */
+      @keyframes nav-scroll {
+        from {
+          background: transparent;
+          border-color: transparent;
+          backdrop-filter: blur(0px);
+        }
+        to {
+          background: rgba(13, 12, 11, 0.92);
+          border-color: var(--border);
+          backdrop-filter: blur(16px);
+        }
+      }
+
+      /* Logo / Nama Brand */
+      .nav-logo {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        color: var(--text-primary);
+        transition: color var(--transition);
+      }
+
+      .nav-logo span {
+        color: var(--accent);
+      }
+
+      .nav-logo:hover {
+        color: var(--accent);
+      }
+
+      /* Menu Navigasi Desktop */
+      .nav-menu {
+        display: flex;
+        gap: 2.5rem;
+        align-items: center;
+      }
+
+      .nav-menu a {
+        font-size: 0.78rem;
+        font-weight: 400;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        position: relative;
+        transition: color var(--transition);
+      }
+
+      /* Garis bawah animasi hover */
+      .nav-menu a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent);
+        transition: width var(--transition);
+      }
+
+      .nav-menu a:hover {
+        color: var(--accent);
+      }
+
+      .nav-menu a:hover::after {
+        width: 100%;
+      }
+
+      /* ============================================================
+       4b. MOBILE HAMBURGER MENU (CSS-ONLY)
+       Menggunakan checkbox tersembunyi sebagai toggle
+       ============================================================ */
+      .nav-toggle {
+        display: none; /* Tersembunyi secara default */
+      }
+
+      .hamburger {
+        display: none; /* Tampil hanya di mobile */
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .hamburger span {
+        display: block;
+        width: 24px;
+        height: 1.5px;
+        background: var(--text-primary);
+        transition: all 0.3s ease;
+      }
+
+      /* Animasi hamburger → X saat menu terbuka */
+      .nav-toggle:checked ~ .hamburger span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+      }
+      .nav-toggle:checked ~ .hamburger span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      .nav-toggle:checked ~ .hamburger span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+      }
+
+      /* Menu mobile saat terbuka */
+      .nav-toggle:checked ~ .nav-menu {
+        display: flex;
+      }
+
+      /* ============================================================
+       5. HERO SECTION
+       Background gradien sinematik yang hangat
+       ============================================================ */
+      #home {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+
+        /* ===================================================
+         BACKGROUND HERO — GANTI GAMBAR DI SINI
+         Ubah URL di bawah dengan link foto Anda sendiri:
+         background-image: url('foto-anda.jpg');
+         ===================================================  */
+        background-image: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(200, 169, 110, 0.08) 0%, transparent 65%), linear-gradient(160deg, #1a1510 0%, #0d0c0b 40%, #10100f 100%);
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* Lapisan grain / noise untuk kesan film */
+      #home::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      /* Garis dekoratif horizontal */
+      #home::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--border), transparent);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        padding: 0 5%;
+        animation: hero-fade-in 1.2s ease both;
+      }
+
+      @keyframes hero-fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Tagline kecil di atas nama */
+      .hero-eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        /* Animasi delay sedikit */
+        animation: hero-fade-in 1.2s 0.1s ease both;
+      }
+
+      /* Nama utama — ukuran sangat besar */
+      .hero-name {
+        font-family: var(--font-display);
+        font-size: clamp(3.5rem, 13vw, 9rem);
+        font-weight: 300;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        animation: hero-fade-in 1.2s 0.2s ease both;
+      }
+
+      .hero-name em {
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      /* Tagline / deskripsi */
+      .hero-tagline {
+        font-size: clamp(0.85rem, 2vw, 1rem);
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+        animation: hero-fade-in 1.2s 0.35s ease both;
+      }
+
+      /* Tombol CTA */
+      .btn {
+        display: inline-block;
+        padding: 0.9rem 2.5rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        font-family: var(--font-body);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: color var(--transition);
+        animation: hero-fade-in 1.2s 0.5s ease both;
+      }
+
+      /* Efek fill dari kiri saat hover */
+      .btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent);
+        transform: translateX(-101%);
+        transition: transform var(--transition);
+      }
+
+      .btn span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .btn:hover {
+        color: var(--bg-dark);
+      }
+
+      .btn:hover::before {
+        transform: translateX(0);
+      }
+
+      /* Ikon scroll ke bawah */
+      .scroll-hint {
+        position: absolute;
+        bottom: 2.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-muted);
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        animation: hero-fade-in 1.2s 0.8s ease both;
+      }
+
+      .scroll-hint::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, var(--accent-muted), transparent);
+        animation: scroll-line 1.8s ease infinite;
+      }
+
+      @keyframes scroll-line {
+        0% {
+          transform: scaleY(0);
+          transform-origin: top;
+        }
+        50% {
+          transform: scaleY(1);
+          transform-origin: top;
+        }
+        51% {
+          transform: scaleY(1);
+          transform-origin: bottom;
+        }
+        100% {
+          transform: scaleY(0);
+          transform-origin: bottom;
+        }
+      }
+
+      /* ============================================================
+       6. ABOUT SECTION
+       Teks kiri, foto kanan (menggunakan Flexbox)
+       ============================================================ */
+      #about {
+        padding: var(--section-pad) 5%;
+        background: var(--bg-section);
+        position: relative;
+      }
+
+      .about-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: clamp(2rem, 6vw, 6rem);
+      }
+
+      /* Teks About */
+      .about-text {
+        flex: 1 1 55%;
+      }
+
+      .about-text p {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        margin-bottom: 1.2rem;
+        max-width: 55ch;
+      }
+
+      .about-text p strong {
+        color: var(--text-primary);
+        font-weight: 400;
+      }
+
+      /* Stats kecil */
+      .about-stats {
+        display: flex;
+        gap: 2.5rem;
+        margin-top: 2.5rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .stat-item strong {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 2rem;
+        font-weight: 300;
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .stat-item span {
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* Foto Profil */
+      .about-photo {
+        flex: 0 0 320px;
+        aspect-ratio: 3/4;
+        position: relative;
+      }
+
+      /* ===================================================
+       FOTO PROFIL — GANTI URL DI SINI
+       Ubah background-image di bawah dengan foto Anda:
+       background-image: url('foto-profil.jpg');
+       =================================================== */
+      .about-photo-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1e1b16 0%, #2a2318 100%);
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Inisial besar sebagai placeholder */
+      .about-photo-placeholder::before {
+        content: "JN";
+        font-family: var(--font-display);
+        font-size: 5rem;
+        font-weight: 300;
+        color: var(--border);
+        letter-spacing: 0.1em;
+      }
+
+      /* Garis dekoratif di foto */
+      .about-photo::before {
+        content: "";
+        position: absolute;
+        top: -1rem;
+        right: -1rem;
+        width: 100%;
+        height: 100%;
+        border: 1px solid var(--accent-muted);
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      /* ============================================================
+       7. PORTFOLIO / GALLERY SECTION
+       CSS Grid masonry-style dengan efek hover elegan
+       ============================================================ */
+      #portfolio {
+        padding: var(--section-pad) 5%;
+        background: var(--bg-dark);
+      }
+
+      .portfolio-header {
+        max-width: 1200px;
+        margin: 0 auto 3.5rem;
+      }
+
+      /* Grid utama — 3 kolom di desktop */
+      .gallery-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+
+      /* Item karya individual */
+      .gallery-item {
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        background: var(--surface);
+
+        /* Beberapa item lebih besar secara kolom/baris untuk kesan masonry */
+      }
+
+      /* Item besar: span 2 baris */
+      .gallery-item.tall {
+        grid-row: span 2;
+      }
+
+      /* Item besar: span 2 kolom */
+      .gallery-item.wide {
+        grid-column: span 2;
+      }
+
+      /* ===================================================
+       PLACEHOLDER FOTO — GANTI DENGAN GAMBAR ASLI
+       Ubah background-image setiap .gallery-item:
+       Contoh: background-image: url('karya-1.jpg');
+       Atau tambahkan <img> di dalam .gallery-item
+       =================================================== */
+
+      /* Gambar / placeholder di dalam item */
+      .gallery-thumb {
+        width: 100%;
+        height: 100%;
+        min-height: 260px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+        /* Placeholder warna berbeda tiap item */
+        background-color: var(--surface);
+      }
+
+      /* Warna placeholder unik per item (ganti dengan foto asli) */
+      .gallery-item:nth-child(1) .gallery-thumb {
+        background: linear-gradient(135deg, #1a1812 0%, #252018 100%);
+      }
+      .gallery-item:nth-child(2) .gallery-thumb {
+        background: linear-gradient(135deg, #141618 0%, #1e2224 100%);
+      }
+      .gallery-item:nth-child(3) .gallery-thumb {
+        background: linear-gradient(135deg, #181414 0%, #241c1c 100%);
+      }
+      .gallery-item:nth-child(4) .gallery-thumb {
+        background: linear-gradient(135deg, #161818 0%, #1e2020 100%);
+      }
+      .gallery-item:nth-child(5) .gallery-thumb {
+        background: linear-gradient(135deg, #181614 0%, #241e18 100%);
+      }
+      .gallery-item:nth-child(6) .gallery-thumb {
+        background: linear-gradient(135deg, #141616 0%, #1c2020 100%);
+      }
+      .gallery-item:nth-child(7) .gallery-thumb {
+        background: linear-gradient(135deg, #171510 0%, #22200e 100%);
+      }
+      .gallery-item:nth-child(8) .gallery-thumb {
+        background: linear-gradient(135deg, #121416 0%, #1a1e22 100%);
+      }
+
+      /* Overlay yang muncul saat hover */
+      .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10, 9, 8, 0.85) 0%, rgba(10, 9, 8, 0.2) 50%, transparent 100%);
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.5rem;
+        transition: opacity var(--transition);
+      }
+
+      /* Label tipe konten (foto/video) */
+      .gallery-type {
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.4rem;
+      }
+
+      /* Judul karya */
+      .gallery-title {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        font-weight: 300;
+        color: var(--text-primary);
+        transform: translateY(8px);
+        transition: transform var(--transition);
+      }
+
+      /* EFEK HOVER: gambar membesar, overlay muncul */
+      .gallery-item:hover .gallery-thumb {
+        transform: scale(1.05);
+      }
+
+      .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+      }
+
+      .gallery-item:hover .gallery-title {
+        transform: translateY(0);
+      }
+
+      /* Ikon placeholder di tengah tiap item */
+      .gallery-placeholder-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--border);
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        pointer-events: none;
+        transition: opacity var(--transition);
+      }
+
+      .gallery-placeholder-icon svg {
+        width: 32px;
+        height: 32px;
+        stroke: var(--border);
+        fill: none;
+      }
+
+      .gallery-item:hover .gallery-placeholder-icon {
+        opacity: 0;
+      }
+
+      /* ============================================================
+       8. CONTACT SECTION
+       Formulir + info kontak / media sosial
+       ============================================================ */
+      #contact {
+        padding: var(--section-pad) 5%;
+        background: var(--bg-section);
+      }
+
+      .contact-inner {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(2rem, 5vw, 5rem);
+        align-items: start;
+      }
+
+      /* Kolom kiri — info */
+      .contact-info .section-title {
+        margin-bottom: 1.2rem;
+      }
+
+      .contact-info p {
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+        max-width: 38ch;
+      }
+
+      /* Daftar kontak & sosial media */
+      .contact-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .contact-list-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      /* Ikon lingkaran kecil */
+      .contact-icon {
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition:
+          border-color var(--transition),
+          background var(--transition);
+      }
+
+      .contact-icon svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--accent);
+        fill: none;
+        stroke-width: 1.5;
+      }
+
+      .contact-list-item:hover .contact-icon {
+        border-color: var(--accent);
+        background: var(--accent-glow);
+      }
+
+      .contact-list-item a,
+      .contact-list-item span {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        transition: color var(--transition);
+      }
+
+      .contact-list-item:hover a,
+      .contact-list-item:hover span {
+        color: var(--text-primary);
+      }
+
+      /* Kolom kanan — Formulir */
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .form-group label {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      /* Input & Textarea */
+      .form-group input,
+      .form-group textarea {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0.85rem 1rem;
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        font-weight: 300;
+        outline: none;
+        transition:
+          border-color var(--transition),
+          background var(--transition);
+        width: 100%;
+      }
+
+      .form-group textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: var(--text-muted);
+      }
+
+      /* Fokus input */
+      .form-group input:focus,
+      .form-group textarea:focus {
+        border-color: var(--accent-muted);
+        background: #1f1d19;
+      }
+
+      /* Tombol kirim */
+      .btn-submit {
+        align-self: flex-start;
+        margin-top: 0.5rem;
+      }
+
+      /* ============================================================
+       9. FOOTER
+       ============================================================ */
+      footer {
+        padding: 2.5rem 5%;
+        background: var(--bg-dark);
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      /* Logo inisial di footer */
+      .footer-logo {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 300;
+        color: var(--text-muted);
+        letter-spacing: 0.1em;
+      }
+
+      .footer-logo span {
+        color: var(--accent);
+      }
+
+      .footer-copy {
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      /* Link navigasi di footer */
+      .footer-nav {
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      .footer-nav a {
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        transition: color var(--transition);
+      }
+
+      .footer-nav a:hover {
+        color: var(--accent);
+      }
+
+      /* ============================================================
+       10. RESPONSIVE — MEDIA QUERIES
+       Breakpoint: Tablet (768px) dan Mobile (480px)
+       ============================================================ */
+
+      /* === TABLET (max 900px) === */
+      @media (max-width: 900px) {
+        :root {
+          --section-pad: 70px;
+        }
+
+        /* About: tumpuk vertikal */
+        .about-inner {
+          flex-direction: column-reverse;
+          text-align: center;
+        }
+
+        .about-photo {
+          flex: 0 0 auto;
+          width: 260px;
+          aspect-ratio: 1/1;
+          margin: 0 auto;
+        }
+
+        .about-stats {
+          justify-content: center;
+        }
+
+        /* Grid galeri: 2 kolom */
+        .gallery-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .gallery-item.wide {
+          grid-column: span 2;
+        }
+
+        /* Kontak: tumpuk vertikal */
+        .contact-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* === MOBILE (max 600px) === */
+      @media (max-width: 600px) {
+        :root {
+          --section-pad: 55px;
+          --nav-h: 60px;
+        }
+
+        /* Tampilkan hamburger */
+        .hamburger {
+          display: flex;
+          z-index: 1001;
+        }
+
+        /* Sembunyikan menu desktop */
+        .nav-menu {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(13, 12, 11, 0.97);
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 2.5rem;
+          z-index: 1000;
+        }
+
+        .nav-menu a {
+          font-size: 1rem;
+          letter-spacing: 0.2em;
+        }
+
+        /* Grid galeri: 1 kolom */
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .gallery-item.tall,
+        .gallery-item.wide {
+          grid-column: span 1;
+          grid-row: span 1;
+        }
+
+        /* Stat angka: kolom 2 */
+        .about-stats {
+          gap: 1.5rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        /* Footer: tengah semua */
+        footer {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .footer-nav {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================================
+       NAVBAR
+       Ubah link href="#..." agar sesuai dengan ID section
+       ============================================================ -->
+    <nav>
+      <!-- Logo / Nama Brand -->
+      <a href="#home" class="nav-logo">Joel <span>Nissi</span></a>
+
+      <!-- Checkbox tersembunyi sebagai toggle mobile menu -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+
+      <!-- Ikon hamburger (tampil di mobile) -->
+      <label for="nav-toggle" class="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+
+      <!-- Menu navigasi -->
+      <ul class="nav-menu">
+        <li><a href="#home" onclick="document.getElementById('nav-toggle').checked = false">Home</a></li>
+        <li><a href="#about" onclick="document.getElementById('nav-toggle').checked = false">About</a></li>
+        <li><a href="#portfolio" onclick="document.getElementById('nav-toggle').checked = false">Portfolio</a></li>
+        <li><a href="#contact" onclick="document.getElementById('nav-toggle').checked = false">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- ============================================================
+       HERO SECTION
+       Ubah teks dan tagline sesuai kebutuhan Anda
+       ============================================================ -->
+    <section id="home">
+      <div class="hero-content">
+        <!-- Label kecil di atas nama -->
+        <div class="hero-eyebrow">Semarang, Central Java</div>
+
+        <!-- Nama utama — ukuran besar -->
+        <h1 class="hero-name">Joel<br /><em>Nissi</em></h1>
+
+        <!-- Tagline / deskripsi singkat -->
+        <p class="hero-tagline">Freelance Photographer &amp; Videographer</p>
+
+        <!-- Tombol CTA -->
+        <a href="#portfolio" class="btn"><span>Lihat Karya Saya</span></a>
+      </div>
+
+      <!-- Indikator scroll -->
+      <div class="scroll-hint">Scroll</div>
+    </section>
+
+    <!-- ============================================================
+       ABOUT SECTION
+       Ganti teks dan foto sesuai profil Anda
+       ============================================================ -->
+    <section id="about">
+      <div class="about-inner">
+        <!-- Teks perkenalan -->
+        <div class="about-text">
+          <p class="section-label">Tentang Saya</p>
+          <h2 class="section-title">Mengabadikan <em>momen</em> dengan mata sinematik</h2>
+
+          <br />
+
+          <!-- Paragraf 1 — ganti dengan bio Anda -->
+          <p>Halo! Saya <strong>Joel Nissi</strong>, fotografer dan videografer freelance berbasis di <strong>Semarang, Jawa Tengah</strong>. Saya percaya setiap momen memiliki cahaya yang tepat—tugas saya adalah menemukannya.</p>
+
+          <!-- Paragraf 2 — ganti dengan deskripsi pendekatan kreatif Anda -->
+          <p>
+            Dengan pendekatan <strong>sinematik yang hangat</strong> dan penuh kesadaran terhadap komposisi, saya mengerjakan berbagai proyek mulai dari <strong>portrait & lifestyle</strong>, <strong>wedding & pre-wedding</strong>, hingga
+            <strong>konten kreatif brand</strong> dan <strong>short film</strong>.
+          </p>
+
+          <!-- Angka statistik -->
+          <div class="about-stats">
+            <!-- Ubah angka sesuai pengalaman Anda -->
+            <div class="stat-item">
+              <strong>3+</strong>
+              <span>Tahun<br />Pengalaman</span>
+            </div>
+            <div class="stat-item">
+              <strong>80+</strong>
+              <span>Proyek<br />Selesai</span>
+            </div>
+            <div class="stat-item">
+              <strong>50+</strong>
+              <span>Klien<br />Puas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foto Profil -->
+        <!-- ===================================================
+           CARA MENGGANTI FOTO PROFIL:
+           Hapus div.about-photo-placeholder di bawah,
+           lalu tambahkan: <img src="foto-anda.jpg" alt="Joel Nissi" style="width:100%;height:100%;object-fit:cover;" />
+           =================================================== -->
+        <div class="about-photo">
+          <div class="about-photo-placeholder">
+            <span>Foto Profil</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+       PORTFOLIO / GALLERY SECTION
+       Tambah/hapus .gallery-item sesuai karya Anda
+       ============================================================ -->
+    <section id="portfolio">
+      <div class="portfolio-header">
+        <p class="section-label">Karya Terpilih</p>
+        <h2 class="section-title">Portfolio &amp; <em>Gallery</em></h2>
+      </div>
+
+      <!-- Grid Galeri -->
+      <!-- ===================================================
+         CARA MENGGANTI PLACEHOLDER DENGAN FOTO ASLI:
+         1. Tambahkan <img> di dalam .gallery-item, setelah .gallery-thumb
+            Contoh: <img src="karya-1.jpg" alt="Judul Karya" class="gallery-thumb" />
+         2. Atau, ubah background-image CSS pada .gallery-thumb
+            Hapus background-color dan tambahkan:
+            background-image: url('karya-1.jpg'); background-size: cover;
+         =================================================== -->
+      <div class="gallery-grid">
+        <!-- Item 1 — Tall (tinggi 2 baris) -->
+        <div class="gallery-item tall">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span>Foto</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Photography</span>
+            <!-- Ganti dengan judul karya Anda -->
+            <p class="gallery-title">Golden Hour Portrait</p>
+          </div>
+        </div>
+
+        <!-- Item 2 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <span>Video</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Videography</span>
+            <p class="gallery-title">Cinematic Wedding Film</p>
+          </div>
+        </div>
+
+        <!-- Item 3 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span>Foto</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Photography</span>
+            <p class="gallery-title">Urban Lifestyle Series</p>
+          </div>
+        </div>
+
+        <!-- Item 4 — Wide (lebar 2 kolom) -->
+        <div class="gallery-item wide">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span>Foto Panorama</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Photography</span>
+            <p class="gallery-title">Semarang Cityscape</p>
+          </div>
+        </div>
+
+        <!-- Item 5 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <span>Video</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Videography</span>
+            <p class="gallery-title">Brand Story — Coffee Shop</p>
+          </div>
+        </div>
+
+        <!-- Item 6 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span>Foto</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Photography</span>
+            <p class="gallery-title">Pre-Wedding Outdoor</p>
+          </div>
+        </div>
+
+        <!-- Item 7 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            <span>Foto</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Photography</span>
+            <p class="gallery-title">Product Photography</p>
+          </div>
+        </div>
+
+        <!-- Item 8 — Normal -->
+        <div class="gallery-item">
+          <div class="gallery-thumb"></div>
+          <div class="gallery-placeholder-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" />
+            </svg>
+            <span>Video</span>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-type">Videography</span>
+            <p class="gallery-title">Short Film — "Kota Lama"</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+       CONTACT SECTION
+       Ganti info kontak dan link sosmed sesuai akun Anda
+       ============================================================ -->
+    <section id="contact">
+      <div class="contact-inner">
+        <!-- Kolom kiri: info -->
+        <div class="contact-info">
+          <p class="section-label">Hubungi Saya</p>
+          <h2 class="section-title">Mari kita <em>berkolaborasi</em></h2>
+          <br />
+          <p>Punya proyek menarik? Saya siap mendiskusikan kebutuhan foto dan video Anda. Kirim pesan atau temukan saya di media sosial di bawah.</p>
+
+          <ul class="contact-list">
+            <!-- Email — ganti dengan email Anda -->
+            <li class="contact-list-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </div>
+              <!-- GANTI EMAIL DI BAWAH INI -->
+              <a href="mailto:joelnissi@email.com">joelnissi@email.com</a>
+            </li>
+
+            <!-- WhatsApp — ganti nomor Anda -->
+            <li class="contact-list-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.65 3.38 2 2 0 0 1 3.62 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                  />
+                </svg>
+              </div>
+              <!-- GANTI NOMOR WA DI BAWAH INI -->
+              <a href="https://wa.me/6281234567890" target="_blank">+62 812-3456-7890</a>
+            </li>
+
+            <!-- Instagram — ganti username Anda -->
+            <li class="contact-list-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </div>
+              <!-- GANTI USERNAME INSTAGRAM DI BAWAH INI -->
+              <a href="https://instagram.com/joelnissi" target="_blank">@joelnissi</a>
+            </li>
+
+            <!-- YouTube — ganti URL Anda -->
+            <li class="contact-list-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.97C18.88 4 12 4 12 4s-6.88 0-8.59.47A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.97C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.96-1.97A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  />
+                  <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+                </svg>
+              </div>
+              <!-- GANTI URL YOUTUBE DI BAWAH INI -->
+              <a href="https://youtube.com/@joelnissi" target="_blank">Joel Nissi</a>
+            </li>
+
+            <!-- Lokasi -->
+            <li class="contact-list-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </div>
+              <span>Semarang, Jawa Tengah</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Kolom kanan: formulir kontak -->
+        <div class="contact-form">
+          <!-- Nama -->
+          <div class="form-group">
+            <label for="nama">Nama Lengkap</label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan nama Anda" />
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">Alamat Email</label>
+            <input type="email" id="email" name="email" placeholder="nama@email.com" />
+          </div>
+
+          <!-- Pesan -->
+          <div class="form-group">
+            <label for="pesan">Pesan</label>
+            <textarea id="pesan" name="pesan" placeholder="Ceritakan proyek Anda..."></textarea>
+          </div>
+
+          <!-- Tombol Kirim -->
+          <!-- Catatan: tanpa JS, tombol ini tidak akan mengirim email secara otomatis.
+             Untuk fungsionalitas, gunakan layanan seperti Formspree.io atau EmailJS -->
+          <a href="mailto:joelnissi@email.com" class="btn btn-submit"><span>Kirim Pesan</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+    <footer>
+      <!-- Logo inisial -->
+      <div class="footer-logo"><span>J</span>N</div>
+
+      <!-- Hak Cipta -->
+      <!-- Ganti tahun dan nama sesuai kebutuhan -->
+      <p class="footer-copy">© 2025 Joel Nissi. All rights reserved.</p>
+
+      <!-- Link navigasi footer -->
+      <nav class="footer-nav">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </footer>
+  </body>
+</html>
